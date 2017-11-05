@@ -35,11 +35,13 @@ class App extends Component {
     this.state = {
       documents: [],
       web3: null,
-      contract: null
+      contract: null,
+      password: ''
     }
 
-    this.handleChange = this.handleChange.bind(this);
+    this.documentSubmitted = this.documentSubmitted.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.passwordUpdated = this.passwordUpdated.bind(this);
 
   }
 
@@ -94,7 +96,16 @@ class App extends Component {
     })
   }
 
-  handleChange(event) {
+  decryptImages(password) {
+  }
+
+  passwordUpdated(event) {
+    var pw = event.target.value
+    this.setState({password: pw});
+    this.decryptImages(pw)
+  }
+
+  documentSubmitted(event) {
     this.setState({value: event.target.value});
     this.setState({file: event.target.files[0]});
   }
@@ -108,7 +119,8 @@ class App extends Component {
     fr.readAsArrayBuffer(this.state.file);
     fr.onload = function(result) {
       var b64 = arrayBufferToBase64(this.result)
-      var data = sjcl.encrypt('password', b64);
+      console.log("encrypting with", state.password);
+      var data = sjcl.encrypt(state.password, b64);
       request.post('http://localhost:8500/bzzr:/')
              .set('Content-Type', 'application/octet-stream')
              .send(data)
@@ -135,6 +147,8 @@ class App extends Component {
         <main className="container">
           <div className="pure-g">
             <div className="pure-u-1-1">
+              <h1>Account Password</h1>
+              <input type="password" value={this.state.password} onChange={this.passwordUpdated}/>
               <h1>Historial Documents</h1>
               <div className="historical-documents">
               { 
@@ -146,13 +160,13 @@ class App extends Component {
               <div className="document-upload">
 		        <form onSubmit={this.handleSubmit}>
                   <label>
-                    <input type="text" value={this.state.value} onChange={this.handleChange} />
+                    <input type="text" value={this.state.value} onChange={this.documentSubmitted} />
                   </label>
                   <input type="submit" value="Submit" />
                   <FileInput name="myFile"
                   placeholder="My file"
                   className="inputClass"
-                  onChange={this.handleChange} />
+                  onChange={this.documentSubmitted} />
                 </form>
               </div>
             </div>
