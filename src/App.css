@@ -9,6 +9,14 @@ h1, h2, h3 {
   font-family: 'Oswald', 'Arial Narrow', sans-serif;
 }
 
+input.invalid-password {
+  background-color: #FAA;
+}
+
+input:disabled {
+  opacity: 0.5;
+}
+
 img.document-locked, img.document-unlocked {
   width: 300px;
   display: block;

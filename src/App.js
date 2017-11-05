@@ -150,7 +150,7 @@ class App extends Component {
     var docSrc = (this.state.decryptedDocs.length === 0) ?
           this.state.encryptedDocs.map(() => ["lock-img.png", "document-locked"]) :
           this.state.decryptedDocs.map((src) => [src, "document-unlocked"])
-
+    var passwordValid = this.state.password.length;
     return (
       <div className="App">
         <nav className="navbar pure-menu pure-menu-horizontal">
@@ -161,7 +161,7 @@ class App extends Component {
           <div className="pure-g">
             <div className="pure-u-1-1">
               <h1>Patient Account</h1>
-              Encryption key: <input type="password" value={this.state.password} onChange={this.passwordUpdated}/>
+              Encryption key: <input className={passwordValid ? "" : "invalid-password"} type="password" value={this.state.password} onChange={this.passwordUpdated}/>
               <h1>Document Archive</h1>
               <div className="historical-documents">
               { 
@@ -175,7 +175,7 @@ class App extends Component {
                   <label>
                     <input type="text" value={this.state.value} onChange={this.documentSubmitted} />
                   </label>
-                  <input type="submit" value="Submit" />
+                  <input disabled={passwordValid ? "" : "disabled"} type="submit" value="Submit" />
                   <FileInput name="myFile"
                   placeholder="My file"
                   className="inputClass"
