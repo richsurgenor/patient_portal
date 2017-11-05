@@ -1,13 +1,17 @@
 pragma solidity ^0.4.18;
 
 contract SimpleStorage {
-  uint storedData;
+  bytes32[] documents;
 
-  function set(uint x) public {
-    storedData = x;
+  function numDocuments() public returns (uint) {
+      return documents.length;
   }
 
-  function get() public view returns (uint) {
-    return storedData;
+  function appendDocument(bytes32 doc) public {
+      documents.push(doc);
+  }
+
+  function getDocument(uint i) public returns (bytes32) {
+      return documents[i];
   }
 }

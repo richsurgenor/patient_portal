@@ -5,15 +5,15 @@ import "truffle/DeployedAddresses.sol";
 import "../contracts/SimpleStorage.sol";
 
 contract TestSimpleStorage {
-
-  function testItStoresAValue() public {
+  function testItStoresDocuments() public {
     SimpleStorage simpleStorage = SimpleStorage(DeployedAddresses.SimpleStorage());
+    Assert.equal(simpleStorage.numDocuments(), 0, "Should be initially empty");
 
-    simpleStorage.set(89);
+    simpleStorage.appendDocument(0x5dbbcd43ee677d7acd385afd170372788cf0460733bf28dcde0bebb6b33a68f9);
+    simpleStorage.appendDocument(0x1111111111111111111111111111111111111111111111111111111111111111);
 
-    uint expected = 89;
-
-    Assert.equal(simpleStorage.get(), expected, "It should store the value 89.");
+    Assert.equal(simpleStorage.getDocument(0), 0x5dbbcd43ee677d7acd385afd170372788cf0460733bf28dcde0bebb6b33a68f9, "It should retrieve first document");
+    Assert.equal(simpleStorage.getDocument(1), 0x1111111111111111111111111111111111111111111111111111111111111111, "It should retrieve second document");
+    Assert.equal(simpleStorage.numDocuments(), 2, "Should contain 2 documents");
   }
-
 }
