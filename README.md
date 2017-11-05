@@ -43,11 +43,10 @@ swarm --bzzaccount 627306090abaB3A6e1400e9345bC60c78a8BEf57 --ens-api http://loc
 
 Upload static web files to Swarm:
 ```shell
-npm run build
-swarm --bzzaccount 627306090abaB3A6e1400e9345bC60c78a8BEf57 --ens-api http://localhost:9545 --recursive up build_webpack
+./upload_static_files.sh
 ```
 
-Point Metmamask at your local blockchain `http://localhost:9545/`
+Point Metamask at your local blockchain `http://localhost:9545/`
 
 The site can now be accessed in swarm. E.g.: `http://127.0.0.1:8500/bzz:/198cd7ed96bc0d5237922df783bfd2a033a1f0ee9ac7e6d48dff93564e71870b/index.html`
 
