@@ -85,9 +85,8 @@ class App extends Component {
 
       return Promise.all(urls.map((url) => {
         request.get(url)
-               .responseType('arraybuffer')
                .end((err, res) => {
-                 var decryptedImage = sjcl.decrypt('password', res.body );
+                 var decryptedImage = sjcl.decrypt('password', res.text);
                  var base64 = 'data:image/jpeg;base64,' + decryptedImage;
                  this.setState({documents: this.state.documents.concat([base64])});
                });
@@ -108,9 +107,11 @@ class App extends Component {
         fr = new FileReader();
     fr.readAsArrayBuffer(this.state.file);
     fr.onload = function(result) {
+      var b64 = arrayBufferToBase64(this.result)
+      var data = sjcl.encrypt('password', b64);
       request.post('http://localhost:8500/bzzr:/')
              .set('Content-Type', 'application/octet-stream')
-             .send( sjcl.encrypt( 'password', arrayBufferToBase64(this.result) ) )
+             .send(data)
              .end((err, res) => {
                var docHash = "0x" + res.text;
                console.log("Loaded ", docHash, " into swarm")
