@@ -13,6 +13,10 @@ input.invalid-password {
   background-color: #FAA;
 }
 
+input.valid-password {
+  background-color: #AFA;
+}
+
 input:disabled {
   opacity: 0.5;
 }

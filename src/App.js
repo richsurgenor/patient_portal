@@ -161,7 +161,7 @@ class App extends Component {
           <div className="pure-g">
             <div className="pure-u-1-1">
               <h1>Patient Account</h1>
-              Encryption key: <input className={passwordValid ? "" : "invalid-password"} type="password" value={this.state.password} onChange={this.passwordUpdated}/>
+              Encryption key: <input className={passwordValid ? "valid-password" : "invalid-password"} type="password" value={this.state.password} onChange={this.passwordUpdated}/>
               <h1>Document Archive</h1>
               <div className="historical-documents">
               { 
