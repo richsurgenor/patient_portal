@@ -1,12 +1,12 @@
-var SimpleStorage = artifacts.require("./SimpleStorage.sol");
+var PatientDocuments = artifacts.require("./PatientDocuments.sol");
 
-contract('SimpleStorage', function(accounts) {
+contract('PatientDocuments', function(accounts) {
   var exampleDoc = "0x5dbbcd43ee677d7acd385afd170372788cf0460733bf28dcde0bebb6b33a68f9",
       account0 = accounts[0];
 
   it("Should provide document access", function() {
     var contract;
-    return SimpleStorage.deployed().then(function(instance) {
+    return PatientDocuments.deployed().then(function(instance) {
       contract = instance;
       return contract.numDocuments.call();
     }).then(function(numDocuments) {

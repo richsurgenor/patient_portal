@@ -1,6 +1,6 @@
 pragma solidity ^0.4.18;
 
-contract SimpleStorage {
+contract PatientDocuments {
   bytes32[] documents;
 
   function numDocuments() public returns (uint) {
