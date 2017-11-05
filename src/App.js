@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import SimpleStorageContract from '../build/contracts/SimpleStorage.json'
 import getWeb3 from './utils/getWeb3'
+import FileInput from 'react-file-input'
+import request from 'superagent'
 
 import './css/oswald.css'
 import './css/open-sans.css'
@@ -74,10 +76,22 @@ class App extends Component {
 
   handleChange(event) {
     this.setState({value: event.target.value});
+    this.setState({file: event.target.files[0]});
+    console.log('Selected file:', event.target.files[0]);
   }
 
   handleSubmit(event) {
     alert('A name was submitted: ' + this.state.value);
+    console.log("event", event);
+
+    request
+    .post('http://localhost:8500/bzzr:/')
+    .set('Content-Type', 'application/x-www-form-urlencoded')
+    .send( this.state.file )
+    .end(function(err, res){
+    console.log(res.text);
+    });  
+
     event.preventDefault();
   }
 
@@ -99,17 +113,17 @@ class App extends Component {
               <p>The stored value is: {this.state.storageValue}</p>
             </div>
           </div>
-		  <form onSubmit={this.handleSubmit}>
+		      <form onSubmit={this.handleSubmit}>
             <label>
               Name:
               <input type="text" value={this.state.value} onChange={this.handleChange} />
             </label>
             <input type="submit" value="Submit" />
+            <FileInput name="myFile"
+            placeholder="My file"
+            className="inputClass"
+            onChange={this.handleChange} />
           </form>
-            <span class="black">Photo:
-          <input class="form-control" type="file"
-            name="fileUpload" id="fileUpload" />
-          </span>
         </main>
       </div>
     );
