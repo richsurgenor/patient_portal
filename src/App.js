@@ -83,18 +83,15 @@ class App extends Component {
       var urls = docs.map((doc) =>
           "http://localhost:8500/bzzr:/" + doc.slice(2))
 
-      urls.map((url) => {
+      return Promise.all(urls.map((url) => {
         request.get(url)
                .responseType('arraybuffer')
                .end((err, res) => {
-                   var img = document.createElement('img');
-                   img.src = 'data:image/jpeg;base64,' + arrayBufferToBase64(res.body);
-                   document.body.appendChild(img);
+                 var base64 = 'data:image/jpeg;base64,' + arrayBufferToBase64(res.body);
+                 this.setState({documents: this.state.documents.concat([base64])});
                });
-      })
-
-      return this.setState({ documents: urls });
-    });
+      }))
+    })
   }
 
   handleChange(event) {
