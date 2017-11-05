@@ -3,6 +3,7 @@ import PatientDocumentsContract from '../build/contracts/PatientDocuments.json'
 import getWeb3 from './utils/getWeb3'
 import FileInput from 'react-file-input'
 import request from 'superagent'
+import sjcl from 'sjcl'
 
 import './css/oswald.css'
 import './css/open-sans.css'
@@ -81,9 +82,13 @@ class App extends Component {
   handleSubmit(event) {
     var contract = this.state.contract,
         web3 = this.state.web3;
+
+    sjcl.encrypt('password', this.state.file);
+    //var decryptedFile = sjcl.decrypt('password', encryptedFile);
     request
     .post('http://localhost:8500/bzzr:/')
     .set('Content-Type', 'application/x-www-form-urlencoded')
+    //.send( sjcl.encrypt('password', this.state.file) )
     .send( this.state.file )
     .end((err, res) => {
       var docHash = "0x" + res.text;
@@ -111,6 +116,7 @@ class App extends Component {
               <h1>Historial Documents</h1>
               <div className="historical-documents">
               { 
+
                 imgUrls.map((doc, i) =>
                 <img key={i} src={doc}></img>
               )}

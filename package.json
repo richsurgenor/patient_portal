@@ -55,6 +55,7 @@
     "react-dom": "^15.4.2",
     "react-file-input": "^0.2.5",
     "react-upload-file": "^2.0.0-beta.6",
+    "sjcl": "^1.0.7",
     "superagent": "^3.8.0"
   },
   "scripts": {
