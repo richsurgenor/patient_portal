@@ -33,7 +33,8 @@ class App extends Component {
     super(props)
 
     this.state = {
-      documents: [],
+      encryptedDocs: [],
+      decryptedDocs: [],
       web3: null,
       contract: null,
       password: ''
@@ -88,20 +89,28 @@ class App extends Component {
       return Promise.all(urls.map((url) => {
         request.get(url)
                .end((err, res) => {
-                 var decryptedImage = sjcl.decrypt('password', res.text);
-                 var base64 = 'data:image/jpeg;base64,' + decryptedImage;
-                 this.setState({documents: this.state.documents.concat([base64])});
+                 this.setState({encryptedDocs: this.state.encryptedDocs.concat([res.text])});
                });
       }))
     })
   }
 
   decryptImages(password) {
+    var decryptedDocs = [];
+    try {
+      decryptedDocs = this.state.encryptedDocs.map((doc) => {
+        var decryptedImage = sjcl.decrypt(password, doc);
+        return 'data:image/jpeg;base64,' + decryptedImage;
+      })
+    } catch(e) {
+      console.log("Failed to decrypt images", e)
+    }
+    this.setState({decryptedDocs: decryptedDocs})
   }
 
   passwordUpdated(event) {
     var pw = event.target.value
-    this.setState({password: pw});
+    this.setState({password: pw})
     this.decryptImages(pw)
   }
 
@@ -138,6 +147,10 @@ class App extends Component {
   }
 
   render() {
+    var docSrc = (this.state.decryptedDocs.length === 0) ?
+          this.state.encryptedDocs.map(() => ["lock-img.png", "document-locked"]) :
+          this.state.decryptedDocs.map((src) => [src, "document-unlocked"])
+
     return (
       <div className="App">
         <nav className="navbar pure-menu pure-menu-horizontal">
@@ -147,13 +160,13 @@ class App extends Component {
         <main className="container">
           <div className="pure-g">
             <div className="pure-u-1-1">
-              <h1>Account Password</h1>
-              <input type="password" value={this.state.password} onChange={this.passwordUpdated}/>
-              <h1>Historial Documents</h1>
+              <h1>Patient Account</h1>
+              Encryption key: <input type="password" value={this.state.password} onChange={this.passwordUpdated}/>
+              <h1>Document Archive</h1>
               <div className="historical-documents">
               { 
-                this.state.documents.map((doc, i) =>
-                    <img key={i} src={doc}></img>
+                docSrc.map((img, i) =>
+                    <img className={img[1]} key={i} src={img[0]}></img>
               )}
               </div>
               <h1>Document Upload</h1>

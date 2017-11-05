@@ -9,10 +9,17 @@ h1, h2, h3 {
   font-family: 'Oswald', 'Arial Narrow', sans-serif;
 }
 
-img {
+img.document-locked, img.document-unlocked {
   width: 300px;
   display: block;
-  padding: 20px;
+  margin: 20px;
+  border-style: solid;
+  border-color: black;
+  border-width: 2px;
+}
+
+img.document-locked {
+  background-color: #DDD;
 }
 
 code {
