@@ -10,6 +10,16 @@ import './css/open-sans.css'
 import './css/pure-min.css'
 import './App.css'
 
+function arrayBufferToBase64(ab) {
+  var binary = '';
+  var bytes = new Uint8Array(ab);
+  var len = bytes.byteLength;
+  for (var i = 0; i < len; i++) {
+      binary += String.fromCharCode(bytes[i]);
+  }
+  return btoa(binary);
+}
+
 function range(n) {
   var nums = [];
   for (var i = 0; i < n; i++) {
@@ -70,8 +80,20 @@ class App extends Component {
         }
       ));
     }).then((docs) => {
-      return this.setState({ documents: docs.map((doc) => 
-        "http://localhost:8500/bzzr:/" + doc.slice(2)) });
+      var urls = docs.map((doc) =>
+          "http://localhost:8500/bzzr:/" + doc.slice(2))
+
+      urls.map((url) => {
+        request.get(url)
+               .responseType('arraybuffer')
+               .end((err, res) => {
+                   var img = document.createElement('img');
+                   img.src = 'data:image/jpeg;base64,' + arrayBufferToBase64(res.body);
+                   document.body.appendChild(img);
+               });
+      })
+
+      return this.setState({ documents: urls });
     });
   }
 
