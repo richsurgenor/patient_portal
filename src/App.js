@@ -70,7 +70,8 @@ class App extends Component {
         }
       ));
     }).then((docs) => {
-      return this.setState({ documents: docs.map((doc) => doc.slice(2)) })
+      return this.setState({ documents: docs.map((doc) => 
+        "http://localhost:8500/bzzr:/" + doc.slice(2)) });
     });
   }
 
@@ -104,7 +105,6 @@ class App extends Component {
   }
 
   render() {
-    var imgUrls = this.state.documents.map((doc) => "http://localhost:8500/bzzr:/" + doc)
     return (
       <div className="App">
         <nav className="navbar pure-menu pure-menu-horizontal">
@@ -117,9 +117,8 @@ class App extends Component {
               <h1>Historial Documents</h1>
               <div className="historical-documents">
               { 
-
-                imgUrls.map((doc, i) =>
-                <img key={i} src={doc}></img>
+                this.state.documents.map((doc, i) =>
+                    <img key={i} src={doc}></img>
               )}
               </div>
               <h1>Document Upload</h1>
