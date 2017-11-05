@@ -83,22 +83,23 @@ class App extends Component {
     var contract = this.state.contract,
         web3 = this.state.web3;
 
-    sjcl.encrypt('password', this.state.file);
-    //var decryptedFile = sjcl.decrypt('password', encryptedFile);
-    request
-    .post('http://localhost:8500/bzzr:/')
-    .set('Content-Type', 'application/x-www-form-urlencoded')
-    //.send( sjcl.encrypt('password', this.state.file) )
-    .send( this.state.file )
-    .end((err, res) => {
-      var docHash = "0x" + res.text;
-      web3.eth.getAccounts((error, accounts) => {
-        return contract.appendDocument(docHash, {from: accounts[0]}).then(() => {
-          this.loadExistingDocuments()
-        })
-      })
-
-    });  
+    var state = this.state,
+        fr = new FileReader();
+    fr.readAsArrayBuffer(this.state.file);
+    fr.onload = function(result) {
+      request.post('http://localhost:8500/bzzr:/')
+             .set('Content-Type', 'application/octet-stream')
+             .send(this.result)
+             .end((err, res) => {
+               var docHash = "0x" + res.text;
+               console.log("Loaded ", docHash, " into swarm")
+               state.web3.eth.getAccounts((error, accounts) => {
+                 return state.contract.appendDocument(docHash, {from: accounts[0]}).then(() => {
+                   alert("File saved")
+                 })
+               })
+      });  
+    };
     event.preventDefault();
   }
 
