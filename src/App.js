@@ -108,30 +108,28 @@ class App extends Component {
         <main className="container">
           <div className="pure-g">
             <div className="pure-u-1-1">
-              <h1>Patient Portal</h1>
-              <p></p>
-              <h2>Smart Contract Example</h2>
-              <p>If your contracts compiled and migrated successfully, below will show a stored value of 5 (by default).</p>
-              <p>Try changing the value stored on <strong>line 59</strong> of App.js.</p>
-              <div>
-                { 
-                    imgUrls.map((doc, i) =>
-                    <img key={i} src={doc}></img>
-                )}
+              <h1>Historial Documents</h1>
+              <div className="historical-documents">
+              { 
+                imgUrls.map((doc, i) =>
+                <img key={i} src={doc}></img>
+              )}
+              </div>
+              <h1>Document Upload</h1>
+              <div className="document-upload">
+		        <form onSubmit={this.handleSubmit}>
+                  <label>
+                    <input type="text" value={this.state.value} onChange={this.handleChange} />
+                  </label>
+                  <input type="submit" value="Submit" />
+                  <FileInput name="myFile"
+                  placeholder="My file"
+                  className="inputClass"
+                  onChange={this.handleChange} />
+                </form>
               </div>
             </div>
           </div>
-		  <form onSubmit={this.handleSubmit}>
-            <label>
-              Name:
-              <input type="text" value={this.state.value} onChange={this.handleChange} />
-            </label>
-            <input type="submit" value="Submit" />
-            <FileInput name="myFile"
-            placeholder="My file"
-            className="inputClass"
-            onChange={this.handleChange} />
-          </form>
         </main>
       </div>
     );
